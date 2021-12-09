@@ -1,0 +1,64 @@
+﻿@model Model_Zupree.UserModelView
+@{
+    ViewBag.Title = "Login";
+}
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100">
+            <div class="login100-pic js-tilt margin-50" data-tilt>
+                <img src="../../App_Images/img-01.png" alt="IMG">
+            </div>
+            <div class="login100-form">
+                @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <span class="login100-form-title">
+                        Member Login
+                    </span>
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "input100", @placeholder = "User Name" } })
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "input100", @placeholder = "Password" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                    <div class="wrap-input100">
+                        @Html.CheckBoxFor(model => model.IsChecked)
+                        @Html.Label("    Remember Me", htmlAttributes: new { @class = "form-label" })
+                    </div>
+                    <div class="wrap-input100">
+                        <asp:Label ID="lblMsg" runat="server" Text="" ForeColor="Red"></asp:Label>
+                    </div>
+                    <div class="container-login100-form-btn">
+                        <button type="submit" class="login100-form-btn">Sing In</button>
+                    </div>
+                }
+                <div class="text-center p-t-12">
+                    <span class="txt1">
+                        Forgot
+                    </span>
+                    <a class="txt2" href="#">
+                        Username / Password?
+                    </a>
+                </div>
+
+                <div class="text-center p-t-136">
+                    <a class="txt2" href="@Url.Action("Signup", new { Controller = "Account", area = "Security" })">
+                        Create your Account
+                        <i class="fas fa-long-arrow-alt-right  m-l-5" style="font-size: 12px;"></i>
+                    </a>
+                </div>
+            </div>
+            </div>
+    </div>
+</div>
+

@@ -1,0 +1,135 @@
+﻿@model IEnumerable<Model_Zupree.UserWiseRoleViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="my-5">
+        <div class="row">
+            <p class="m-3">
+                <a href="#" class="btn btn-save" name="btnCreateModal" data-bs-toggle="modal" data-bs-target="#CreateModal">Add User In A Role</a>
+            </p>
+            <h2>User Wise Role</h2>
+            <div class="col-md-12  table-responsive">
+                <table class="table table-bordered text-center">
+                    <tr>
+                        <th></th>
+                        <th>User Id</th>
+                        <th>Role Name@*@Html.ActionLink("Product Name", "Index", new { SortOrder = ViewBag.SortNameParam })*@</th>
+                        <th>User Name</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email Address</th>
+                        <th>User Image</th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="#" class="btn btn-update" name="btnEditModal" onclick='Update("+@item.uwrId+")' data-bs-toggle="modal" data-bs-target="#EditModal">Edit</a>
+                                <a href="#" class="btn btn-delete" name="btnDeleteModal" onclick='Delete("+@item.uwrId+")' data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete</a>
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.UserId)</td>
+                            <td>@Html.DisplayFor(modelItem => item.RoleName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                            <td>
+                                <img src="@Url.Content(item.ImageUrl)" alt="@item.ImageName" width="50" height="50" />
+                            </td>
+                        </tr>
+                    }
+                </table>
+                <br />
+                @*Page@(Model.PageCount<Model.PageNumber?0:Model.PageNumber)of @Model.PageCount
+                    @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))*@
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Add User In A Role</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    @{Html.RenderAction("Create");}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Update Product</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    <div id="EditDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/Security/Views/UserWiseRole/_Edit.cshtml", Model);
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Delete User Role</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="DeleteDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/Security/Views/UserWiseRole/_Delete.cshtml", Model);
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function Update(uwrId) {
+        $.ajax({
+            url: "/UserWiseRole/Edit?id=" + uwrId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#EditDiv').show();
+                $('#EditDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+    function Delete(uwrId) {
+        $.ajax({
+            url: "/UserWiseRole/Delete?id=" + uwrId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#DeleteDiv').show();
+                $('#DeleteDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+</script>
+

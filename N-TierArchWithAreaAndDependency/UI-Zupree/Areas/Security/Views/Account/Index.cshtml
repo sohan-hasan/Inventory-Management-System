@@ -1,0 +1,79 @@
+﻿@model PagedList.IPagedList<Model_Zupree.UserModelView>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="my-5">
+        <div class="row">
+            <div class="col-md-12  table-responsive">
+
+                @using (Html.BeginForm("Index", "Account", FormMethod.Get))
+                {
+                    <p class="my-3">
+                        <div class="input-group">
+                            <div class="form-outline">
+                                @Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control", @type = "search", @placeholder = "Search User" })
+                            </div>
+                            <button type="submit" class="btn btn-warning" style="height:38px;">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </p>
+                }
+                @using (Html.BeginForm("SelectAndDelete", "Account", FormMethod.Post))
+                {
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('Do you want to Delete?')">Select &amp; Delete</button>
+                    <h2 class="my-3">User List</h2>
+                    <table class="table table-bordered text-center">
+                        <tr>
+                            <th style="width: 60px;"><input type="checkbox" id="CheckBoxAll" /></th>
+                            <th>User Id</th>
+                            <th>First Name@*@Html.ActionLink("Product Name", "Index", new { SortOrder = ViewBag.SortNameParam })*@</th>
+                            <th>Last Name</th>
+                            <th>User Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>User Image</th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="chkCheckBoxId" value="@item.UserId" name="userId" /></td>
+                                <td>@Html.DisplayFor(modelItem => item.UserId)</td>
+                                <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                <td>
+                                    <img src="@Url.Content(item.ImageUrl)" alt="@item.ImageName" width="50" height="50" />
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                }
+                <br />
+                Page@(Model.PageCount<Model.PageNumber?0:Model.PageNumber)of @Model.PageCount
+                @Html.PagedListPager(Model, Page => Url.Action("Index", "Account", new { Page }))
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#CheckBoxAll').click(function () {
+            if ($(this).is(":checked")) {
+                $('.chkCheckBoxId').prop('checked', true);
+            }
+            else
+                $('.chkCheckBoxId').prop('checked', false);
+        })
+    })
+</script>
+
+

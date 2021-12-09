@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Model_Zupree.RoleViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    <div class="my-5">
+        <div class="row">
+            <div class="col-xxl-6 mx-auto my-5">
+                <p class="m-3">
+                </p>
+                <h2 class="text-center my-3">Role List</h2>
+                <table class="table table-bordered table-striped">
+                    <tr>
+                        <th>Role Id</th>
+                        <th>Role Name</th>
+                        <th>
+                            <a href="#" class="btn btn-save" name="btnCreateModal" data-bs-toggle="modal" data-bs-target="#CreateModal">Add Role</a>
+                        </th>
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.RoleId</td>
+                            <td>@item.RoleName</td>
+                            <td>
+                                <a href="#" class="btn btn-update" name="btnEditModal" onclick='Update("+@item.RoleId+")' data-bs-toggle="modal" data-bs-target="#EditModal">Edit</a>
+                                <a href="#" class="btn btn-delete" name="btnDeleteModal" onclick='Delete("+@item.RoleId+")' data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+            <div class="modal fade" id="CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header px-md-5">
+                            <h3 class="modal-title" id="detailsModalLabel">Add Supplier</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body px-md-5">
+                            @{Html.RenderAction("Create");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header px-md-5">
+                            <h3 class="modal-title" id="detailsModalLabel">Update Product</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body px-md-5">
+                            <div id="EditDiv">
+                                @if (ViewBag.Details == "Show")
+                                {
+                                    @Html.Partial("~/Areas/Security/Views/Role/_Edit.cshtml", Model);
+                                    ViewBag.Details = "";
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header px-md-5">
+                            <h3 class="modal-title" id="detailsModalLabel">Delete Product</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="DeleteDiv">
+                                @if (ViewBag.Details == "Show")
+                                {
+                                    @Html.Partial("~/Areas/Security/Views/Role/_Delete.cshtml", Model);
+                                    ViewBag.Details = "";
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <script>
+                function Update(roleId) {
+                    $.ajax({
+                        url: "/Role/Edit?id=" + roleId,
+                        type: "GET",
+                        data: "",
+                        contentType: 'application/json; charset = utf-8',
+                        success: function (data) {
+                            $('#EditDiv').show();
+                            $('#EditDiv').html(data);
+                        },
+                        error: function () {
+                            alert("Error occured")
+                        }
+                    })
+                }
+                function Delete(roleId) {
+                    $.ajax({
+                        url: "/role/Delete?id=" + roleId,
+                        type: "GET",
+                        data: "",
+                        contentType: 'application/json; charset = utf-8',
+                        success: function (data) {
+                            $('#DeleteDiv').show();
+                            $('#DeleteDiv').html(data);
+                        },
+                        error: function () {
+                            alert("Error occured")
+                        }
+                    })
+                }
+            </script>
+
+

@@ -1,0 +1,20 @@
+﻿@model Model_Zupree.RoleViewModel
+@using (Html.BeginForm("Delete", "Role", new { area = "Security" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        @Html.HiddenFor(model => model.RoleId)
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.RoleName, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.RoleName, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.RoleName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-delete" onclick="return confirm('Do you want to Delete?')">Delete</button>
+                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+}
+

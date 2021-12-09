@@ -1,0 +1,95 @@
+﻿@model Model_Zupree.UserModelView
+@{
+    ViewBag.Title = "SingUp";
+    Layout = "~/Areas/Security/Views/Shared/_Layout.cshtml";
+}
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100" style="padding: 74px 130px 33px 95px;">
+            <div class="login100-pic reg100-pic js-tilt" data-tilt>
+                <img src="../../App_Images/img-01.png" alt="IMG">
+            </div>
+            <div class="login100-form">
+                @using (Html.BeginForm("Signup", "Account", new { area = "Security" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <span class="login100-form-title">
+                        User Registration
+                    </span>
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "input100", @placeholder = "First Name" } })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "input100", @placeholder = "Last Name" } })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "input100", @placeholder = "User Name" } })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "input100", @placeholder = "Phone Number" } })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "input100", @placeholder = "Email Address" } })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    <div class="wrap-input100">
+                        @Html.LabelFor(model => model.ImageName, htmlAttributes: new { @class = "form-label  mb-3" })<br />
+                        <img src="~/App_Images/no-image.png" height="120" width="110" class="changeEdit mb-3" />
+                        <input type="file" id="imageChange1" name="ImageFile" class="form-control imageChange" required />
+                    </div>
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "input100", @placeholder = "Password" } })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    <div class="wrap-input100">
+                        @Html.EditorFor(model => model.RepeatPassword, new { htmlAttributes = new { @class = "input100", @placeholder = "Confirm" } })
+                        <span class="focus-input100"></span>
+                        <span class="symbol-input100">
+                            <i class="far fa-user"></i>
+                        </span>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.RepeatPassword, "", new { @class = "text-danger" })
+                    <div class="container-login100-form-btn">
+                        <button type="submit" class="login100-form-btn">Sing Up</button>
+                    </div>
+                }
+                <div class="text-center p-t-12">
+                    <a href="@Url.Action("Login", new { Controller = "Account", area = "Security" })" class="txt2  cursor_pointer">
+                        Login your Account
+                        <i class="fas fa-long-arrow-alt-right  m-l-5" style="font-size: 12px;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

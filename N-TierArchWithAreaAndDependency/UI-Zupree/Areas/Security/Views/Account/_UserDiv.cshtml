@@ -1,0 +1,12 @@
+﻿@*@model Model_Zupree.UserWiseRoleViewModel
+@using (Html.BeginForm("userInfo", "Account", new { area = "Security" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="container-fluid">
+        <a id="NavMenuBar" class="navbar-brand nabMenuBar" href="#">ZUPREE<i class="fa fa-bars"></i> </a>
+        @Html.Label(("Welcome " + Model.FirstName+" "+Model.LastName).ToUpper(), htmlAttributes: new { @class = "form-label user" })
+        <div class="user_images">
+            <img src="@Url.Content(Model.ImageUrl)" alt="@Model.ImageName" height="50" width="50" class="rounded-circle   img-fluid" />
+        </div>
+    </div>
+}*@
+ 

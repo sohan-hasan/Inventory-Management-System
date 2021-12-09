@@ -1,0 +1,122 @@
+﻿@model Model_Zupree.SalesViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+
+<div class="col-md-12" id="jsPDFContent">
+    <dl>
+        <dt>@Html.DisplayNameFor(model => model.SalesNumber)</dt>
+        <dd>@Html.DisplayFor(model => model.SalesNumber)</dd>
+        <dt>@Html.DisplayNameFor(model => model.CustomerName)</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerName)</dd>
+        <dt>@Html.DisplayNameFor(model => model.CustomerPhone)</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerPhone)</dd>
+        <dt>@Html.DisplayNameFor(model => model.CustomerEmail)</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerEmail)</dd>
+        <dt>@Html.DisplayNameFor(model => model.SalesUnitPrice)</dt>
+        <dd>@Html.DisplayFor(model => model.SalesUnitPrice)</dd>
+        <dt>@Html.DisplayNameFor(model => model.Quantity)</dt>
+        <dd>@Html.DisplayFor(model => model.Quantity)</dd>
+        <dt>@Html.DisplayNameFor(model => model.ImageName)</dt>
+        <dd><img src="@Url.Content(Model.ImageUrl)" alt="@Model.ImageName" width="200" height="180" /></dd>
+
+    </dl>
+    <a href="javascript:demoFromHTML()" class="btn btn-warning">Print Sales Details</a>
+    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+    @*@Html.HiddenFor(model => model.SalesNumber)
+        <div class="form-group mb-3">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerPhone, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerPhone, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.CustomerPhone, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerEmail, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.CustomerEmail, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.PaymentId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.PaymentId, new SelectList(ViewBag.Payments, "PaymentId", "PaymentType"), "Select Payment Type", new { @class = "form-select", @disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.PaymentId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.Products, "ProductId", "ProductName"), "Select Product", new { @class = "form-select", @disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.SalesUnitPrice, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.SalesUnitPrice, new { htmlAttributes = new { @class = "form-control", @value = "0", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.SalesUnitPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @value = "0", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ImageUrl, htmlAttributes: new { @class = "form-label  mb-3" })<br />
+            <img src="@Url.Content(Model.ImageUrl)" alt="@Model.ImageName" height="120" width="110" class="changeEdit mb-3" />
+        </div>
+        <div class="form-group mb-3">
+            <a href="javascript:demoFromHTML()" class="button">Run Code</a>
+            <button type="submit" class="btn btn-report" onclick="HTMLtoPDF()">View Report</button>
+            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+        </div>*@
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+
+    <script>
+        function demoFromHTML() {
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            // source can be HTML-formatted string, or a reference
+            // to an actual DOM element from which the text will be scraped.
+            source = $('#jsPDFContent')[0];
+
+            // we support special element handlers. Register them with jQuery-style
+            // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+            // There is no support for any other type of selectors
+            // (class, of compound) at this time.
+            specialElementHandlers = {
+                // element with id of "bypass" - jQuery style selector
+                '#bypassme': function (element, renderer) {
+                    // true = "handled elsewhere, bypass text extraction"
+                    return true
+                }
+            };
+            margins = {
+                top: 80,
+                bottom: 60,
+                left: 40,
+                width: 522
+            };
+            // all coords and widths are in jsPDF instance's declared units
+            // 'inches' in this case
+            pdf.fromHTML(
+                source, // HTML string or DOM elem ref.
+                margins.left, // x coord
+                margins.top, { // y coord
+                'width': margins.width, // max width of content on PDF
+                'elementHandlers': specialElementHandlers
+            },
+
+                function (dispose) {
+                    // dispose: object with X, Y of the last line add to the PDF
+                    //          this allow the insertion of new lines after html
+                    pdf.save('SalesReport.pdf');
+                }, margins
+            );
+        }
+    </script>

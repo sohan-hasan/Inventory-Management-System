@@ -1,0 +1,182 @@
+﻿@model IEnumerable<Model_Zupree.SalesViewModel>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container-fluid">
+    <div class="my-5">
+        <div class="row">
+            <p class="m-3">
+                <a href="#" class="btn btn-save" name="btnCreateModal" data-bs-toggle="modal" data-bs-target="#CreateModal">Sales Product</a>
+
+            </p>
+            <h2>Avilable Product</h2>
+            <div class="col-md-12  table-responsive">
+                <table class="table table-bordered text-center">
+                    <tr>
+                        <th></th>
+                        <th>Sales Id</th>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Email@*@Html.ActionLink("Product Name", "Index", new { SortOrder = ViewBag.SortNameParam })*@</th>
+                        <th>Product Name</th>
+                        <th>Payment Type</th>
+                        <th>Sales Unit Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Product Image</th>
+
+                    </tr>
+                    @foreach (var item in Model)
+                    {
+                <tr>
+                    <td>
+                        <a href="#" class="btn btn-update" name="btnEditModal" onclick='Update("+@item.SalesNumber+")' data-bs-toggle="modal" data-bs-target="#EditModal">Edit</a>
+                        <a href="#" class="btn btn-delete" name="btnDeleteModal" onclick='Delete("+@item.SalesNumber+")' data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete</a>
+                        <a href="#" class="btn btn-details" name="details" onclick='Details("+@item.SalesNumber+")' data-bs-toggle="modal" data-bs-target="#detailsModal">Details</a>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.SalesNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CustomerName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CustomerPhone)</td>
+                    <td>@Html.DisplayFor(modelItem => item.CustomerEmail)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PaymentType)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SalesUnitPrice)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalPrice)</td>
+                    <td>
+                        <img src="@Url.Content(item.ImageUrl)" alt="@item.ImageName" width="50" height="50" />
+                    </td>
+                </tr>
+                    }
+                </table>
+                <br />
+                @*Page@(Model.PageCount<Model.PageNumber?0:Model.PageNumber)of @Model.PageCount
+                    @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))*@
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5 ba">
+                    <h3 class="modal-title" id="detailsModalLabel">Sales Details</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    <div id="DetailsDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/User/Views/Product/_Details.cshtml", Model)
+
+
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Sales Product</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    @{Html.RenderAction("Create");}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Update Sales</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    <div id="EditDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/User/Views/Sales/_Edit.cshtml", Model);
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Delete Sales</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    <div id="DeleteDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/User/Views/Product/_Delete.cshtml", Model);
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function Details(salesNumber) {
+        $.ajax({
+            url: "/Sales/Details?id=" + salesNumber,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#DetailsDiv').show();
+                $('#DetailsDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+    function Update(salesNumber) {
+        $.ajax({
+            url: "/Sales/Edit?id=" + salesNumber,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#EditDiv').show();
+                $('#EditDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+    function Delete(salesNumber) {
+        $.ajax({
+            url: "/Sales/Delete?id=" + salesNumber,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#DeleteDiv').show();
+                $('#DeleteDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+</script>
+
+

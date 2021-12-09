@@ -1,0 +1,87 @@
+﻿@model Model_Zupree.UserWiseRoleViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+@using (Html.BeginForm("Create", "UserWiseRole", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+<div class="col-md-12">
+    <div class="form-group mb-3">
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.UserId, new SelectList(string.Empty, "UserId", "UserName"), "Select User Name", new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "form-label" })
+        @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", @value = "0", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "form-label" })
+        @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", @value = "0", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "form-label" })
+        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", @value = "0", @readonly = "readonly" } })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.ImageName, htmlAttributes: new { @class = "form-label  mb-3" })<br />
+        <img src="~/App_Images/no-image.png" id="UserImage" height="120" width="110" class="changeEdit mb-3" />
+    </div>
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.RoleId, htmlAttributes: new { @class = "form-label" })
+        @Html.DropDownListFor(model => model.RoleId, new SelectList(ViewBag.Role, "RoleId", "RoleName"), "Select Role Name", new { @class = "form-select" })
+        @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+    </div>
+    <div class="form-group mb-3">
+        <button type="submit" class="btn btn-save">Save</button>
+        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+    </div>
+</div>
+}
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "/UserWiseRole/GetAll/",
+            dataType: "Json",
+            success: function (data) {
+                $.each(data, function (index, value) {
+                    $('#UserId').append('<option value="' + value.UserId + '">' + value.UserName + '</option>')
+                });
+            }
+        });
+        $('#UserId').change(function () {
+            var userId = $('#UserId').val();
+            if (userId > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/UserWiseRole/GetAllById?userId=" + userId,
+                    dataType: "Json",
+                    success: function (data) {
+                        console.log(data);
+                        $("#UserImage").attr("src", "../../Images/UserImages/" + data.ImageName);
+                        $("#FirstName").attr("value", data.FirstName);
+                        $("#LastName").attr("value", data.LastName);
+                        $("#Email").attr("value", data.Email);
+
+                    }
+
+                })
+            } else {
+                $("#UserImage").attr("src", "../../App_Images/no-image.png");
+                $("#FirstName").attr("value", "");
+                $("#LastName").attr("value", "");
+                $("#Email").attr("value", "");
+            }
+        });
+    });
+</script>
+

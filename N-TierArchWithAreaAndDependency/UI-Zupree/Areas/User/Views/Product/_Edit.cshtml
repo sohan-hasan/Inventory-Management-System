@@ -1,0 +1,83 @@
+﻿@model Model_Zupree.ProductViewModel
+@using (Html.BeginForm("Create", "Product", new { area = "User" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        @Html.HiddenFor(model => model.ProductId)
+        @Html.HiddenFor(model => model.ImageName)
+        @Html.HiddenFor(model => model.ImageUrl)
+        <div class="form-group mb-3">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.ProductName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.ProductName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3 position-relative">
+            @Html.LabelFor(model => model.PurchaseDate, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.PurchaseDate, new { htmlAttributes = new { @class = "form-control datetimepicker" } })
+            @Html.ValidationMessageFor(model => model.PurchaseDate, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CategoryId, htmlAttributes: new { @class = "form-label" })
+
+            @Html.DropDownListFor(model => model.CategoryId, new SelectList(ViewBag.Categories, "CategoryId", "CategoryName"), new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.SupplierId, htmlAttributes: new { @class = "form-label" })
+
+            @Html.DropDownListFor(model => model.SupplierId, new SelectList(ViewBag.Suppliers, "SupplierId", "CompanyName"), new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.SupplierId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "form-label" })
+
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "form-label" })
+
+            @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.MSRP, htmlAttributes: new { @class = "form-label" })
+
+            @Html.EditorFor(model => model.MSRP, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.MSRP, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ImageUrl, htmlAttributes: new { @class = "form-label  mb-3" })<br />
+            <img src="@Url.Content(Model.ImageUrl)" alt="@Model.ImageName" height="120" width="110" class="changeEdit mb-3" />
+            <input type="file" id="imageChange1" name="ImageFile" class="form-control imageChange" />
+        </div>
+        <div class="form-group mb-3">
+            <button type="submit" class="btn btn-update">Update</button>
+            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+}
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script>
+    $(function () {
+        $('.datetimepicker').datetimepicker({ format: 'L' })
+        $('.imageChange').change(function () {
+            var input = this;
+            if (input.files) {
+                var rdr = new FileReader();
+                rdr.onload = function (e) {
+                    $('.changeEdit').attr('src', e.target.result);
+                }
+                rdr.readAsDataURL(input.files[0]);
+            }
+        })
+    });
+</script>
+
+
+
+

@@ -1,0 +1,31 @@
+﻿@model Model_Zupree.UserWiseRoleViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+@using (Html.BeginForm("Create", "UserWiseRole", new { area = "Security" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        @Html.HiddenFor(model=>model.uwrId)
+        <div class="form-group mb-3">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.UserId, new SelectList(ViewBag.User, "UserId", "UserName"), "Select User Name", new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.RoleId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.RoleId, new SelectList(ViewBag.Role, "RoleId", "RoleName"), "Select Role Name", new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.RoleId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            <div class="form-group mb-3">
+                <button type="submit" class="btn btn-update">Update</button>
+                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+}

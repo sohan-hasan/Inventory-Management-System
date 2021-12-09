@@ -1,0 +1,147 @@
+﻿@model Model_Zupree.SalesViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+@using (Html.BeginForm("Create", "Sales", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        <div class="form-group mb-3">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerPhone, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerPhone, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CustomerPhone, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerEmail, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CustomerEmail, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.PaymentId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.PaymentId, new SelectList(ViewBag.Payments, "PaymentId", "PaymentType"), "Select Payment Type", new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.PaymentId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.ProductId, new SelectList(string.Empty, "ProductId", "ProductName"), "Select Product", new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ImageName, htmlAttributes: new { @class = "form-label  mb-3" })<br />
+            <img src="~/App_Images/no-image.png" id="productImage" height="120" width="110" class="changeEdit mb-3" />
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.SalesUnitPrice, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.SalesUnitPrice, new { htmlAttributes = new { @class = "form-control", @value="0", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.SalesUnitPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.AvailableQuantity, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.AvailableQuantity, new { htmlAttributes = new { @class = "form-control", @value = "0", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.AvailableQuantity, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @value = "0", } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+           <div id="#test123"></div>
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.TotalPrice, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.TotalPrice, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly"} })
+            @Html.ValidationMessageFor(model => model.TotalPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            <button type="submit" class="btn btn-save" id="btnSave">Save</button>
+            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+}
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: "/Sales/GetProduct/",
+            dataType: "Json",
+            success: function (data) {
+                $.each(data, function (index, value) {
+                    $('#ProductId').append('<option value="' + value.ProductId + '">' + value.ProductName + '</option>')
+                });
+            }
+        });
+        $('#ProductId').change(function () {
+            var productId = $('#ProductId').val();
+            if (productId > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Sales/GetAllById?productId=" + productId,
+                    dataType: "Json",
+                    success: function (data) {
+                        console.log(data);
+                        $("#productImage").attr("src", "../../Images/ProductImages/" + data.ImageName);
+                        $("#SalesUnitPrice").attr("value", data.MSRP);
+                        $("#AvailableQuantity").attr("value", data.Quantity);
+
+                    }
+
+                })
+            } else {
+                $("#productImage").attr("src", "../../App_Images/no-image.png");
+                $("#SalesUnitPrice").attr("value", "");
+                $("#AvailableQuantity").attr("value", "");
+            }
+        });
+    });
+
+    $('#Quantity').focusout(function () {
+        var quantity = parseInt($('#Quantity').val());
+        var availableQuantity = parseInt($('#AvailableQuantity').val());
+        var salesUnitPrice = parseInt($('#SalesUnitPrice').val());
+        if (availableQuantity < quantity) {
+            alert("You Do not enough Product");
+            $('#Quantity').val(0);
+            $("#TotalPrice").val(0);
+            return false;
+        }
+        else {
+            $("#TotalPrice").val(quantity * salesUnitPrice);    
+            return true;
+        }
+
+    });
+    $('#Quantity').keyup(function () {
+        var quantity = parseInt($('#Quantity').val());
+        var salesUnitPrice = parseInt($('#SalesUnitPrice').val());
+        $("#TotalPrice").val(quantity * salesUnitPrice);
+    });
+    $('#btnSave').click(function () {
+        var quantity = parseInt($('#Quantity').val());
+        var availableQuantity = parseInt($('#AvailableQuantity').val());
+        var salesUnitPrice = parseInt($('#SalesUnitPrice').val());
+        if (availableQuantity < quantity) {
+            alert("You Do not enough Product");
+            $('#Quantity').val(0);
+            $("#TotalPrice").val(0);
+            return false;
+        }
+        else {
+            $("#TotalPrice").val(quantity * salesUnitPrice);
+            return true;
+        }
+
+    });
+</script>
+
+
+
+

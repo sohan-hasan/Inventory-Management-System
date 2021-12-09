@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Model_Zupree.CategoryViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<div class="col-xxl-6 mx-auto">
+    <div class="pt-5"></div>
+    <div class="my-2" id="divAjax1">
+        @using (Ajax.BeginForm("AjaxCreate", "Category", new AjaxOptions
+        {
+            HttpMethod = "POST",
+            UpdateTargetId = "divAjax",
+            LoadingElementId = "LoadingImage",
+            LoadingElementDuration = 2000,
+            Confirm = "Are You Sure to Save this Data?",
+            OnComplete = "Clear",
+        }
+        ))
+        {
+            @Html.AntiForgeryToken()
+            <h2 class="mb-3">Add Category</h2>
+            <h6>Page Loding @@ : @DateTime.Now.ToString()</h6>
+            <div class="form-group mb-3">
+                @Html.Label("Category Name", new { @class = "form-label" })
+                @Html.TextBox("CategoryName", null, new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-info btnCategorySave" style="width:200px;" />
+            </div>
+        }
+    </div>
+    <div class="col-md-12" id="LoadingImage" style="display:none;">
+        <img src="~/App_Images/giphy.gif" width="100" height="100" />
+    </div>
+    <div class="my-5" id="divAjax">
+        @{Html.RenderPartial("_Category", Model);}
+    </div>
+</div>
+<div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header px-md-5">
+                <h3 class="modal-title" id="detailsModalLabel">Update Product</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body px-md-5">
+                <div id="EditDiv">
+                    @if (ViewBag.Details == "Show")
+                    {
+                        @Html.Partial("~/Areas/User/Views/Category/_Edit.cshtml", Model);
+                        ViewBag.Details = "";
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header px-md-5">
+                <h3 class="modal-title" id="detailsModalLabel">Delete Product</h3>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="DeleteDiv">
+                    @if (ViewBag.Details == "Show")
+                    {
+                        @Html.Partial("~/Areas/User/Views/Category/_Delete.cshtml", Model);
+                        ViewBag.Details = "";
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function Clear() {
+        $(this).closest('form').find("input[type=text], textarea").val("");
+    }
+    function Update(categoryId) {
+        $.ajax({
+            url: "/Category/Edit?id=" + categoryId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#EditDiv').show();
+                $('#EditDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+    function Delete(categoryId) {
+        $.ajax({
+            url: "/Category/Delete?id=" + categoryId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#DeleteDiv').show();
+                $('#DeleteDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+</script>

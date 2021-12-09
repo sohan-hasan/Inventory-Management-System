@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="77e9049c42ff47f9b9296d7b6af18c9c" Name="Diagram1">
+        <EntityTypeShape EntityType="ZupreeDBModel.Category" Width="1.5" PointX="0.75" PointY="2" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZupreeDBModel.Payment" Width="1.5" PointX="3" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZupreeDBModel.Product" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZupreeDBModel.Sale" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZupreeDBModel.Supplier" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZupreeDBModel.tblRole" Width="1.5" PointX="5.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZupreeDBModel.tblUser" Width="1.5" PointX="5.75" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZupreeDBModel.UserWiseRole" Width="1.5" PointX="8" PointY="5.875" IsExpanded="true" />
+        <AssociationConnector Association="ZupreeDBModel.FK_Products_ToTable_1" ManuallyRouted="false" />
+        <AssociationConnector Association="ZupreeDBModel.FK_Orders_ToTable_2" ManuallyRouted="false" />
+        <AssociationConnector Association="ZupreeDBModel.FK_Orders_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="ZupreeDBModel.FK_Products_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="ZupreeDBModel.FK_UserWiseRole_ToTable" ManuallyRouted="false" />
+        <AssociationConnector Association="ZupreeDBModel.FK_UserWiseRole_ToTable_1" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

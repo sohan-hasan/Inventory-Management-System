@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    <link href="~/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="~/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+    <link href="~/Content/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/CSS/style.css">
+    <link rel="stylesheet" href="~/CSS/responsive.css">
+</head>
+<body>
+<div id="ContentBody" class="ContentBody-M">
+    <nav class="navbar shadow-sm fixed-top navbar-light bg-light">
+        <div class="container-fluid">
+            <a id="NavMenuBar" class="navbar-brand nabMenuBar" href="#"><i class="fa fa-bars"></i> </a>
+            @Html.Label(("Welcome " + User.Identity.Name).ToUpper(), htmlAttributes: new { @class = "form-label user" })
+            <div class="user_images">
+                @*<img src="@Url.Content(Model.ImageUrl)" alt="@Model.ImageName" height="50" width="50" class="rounded-circle   img-fluid" />*@
+            </div>
+        </div>
+    </nav>
+    <div id="SideNavID" class="sideNavOpen mt-5">
+        <a href="@Url.Action("Index", new { Controller = "Home", area = "Common" })" class="nav-menu-item">
+            <i class="fas fa-home m-2"></i>
+            <span class="menuText ">
+                <strong>Home</strong>
+            </span>
+        </a>
+        @if (User.IsInRole("Admin") || User.IsInRole("Viewer"))
+        {
+            <a href="@Url.Action("Index", new { Controller = "Supplier", area = "User" })" class="nav-menu-item">
+                <i class="fas fa-shopping-bag m-2"></i>
+                <span class="menuText ">
+                    <strong>Suppliers</strong>
+                </span>
+            </a>
+            <a href="@Url.Action("Create", new { Controller = "Category", area = "User" })" class="nav-menu-item">
+                <i class="fas fa-cubes m-2"></i>
+                <span class="menuText ">
+                    <strong>Category</strong>
+                </span>
+            </a>
+            <a href="@Url.Action("Index", new { Controller = "Product", area = "User" })" class="nav-menu-item">
+                <i class="fas fa-shopping-cart m-2"></i>
+                <span class="menuText ">
+                    <strong>Product</strong>
+                </span>
+            </a>
+            <a href="@Url.Action("Index", new { Controller = "Sales", area = "User" })" class="nav-menu-item">
+                <i class="fas fa-cart-arrow-down m-2"></i>
+                <span class="menuText ">
+                    <strong>Sales</strong>
+                </span>
+            </a>
+        }
+        @if (User.IsInRole("Admin"))
+        {
+            <a href="@Url.Action("ExportReport", new { Controller = "Product", area = "User" })" class="nav-menu-item" target="_blank"> 
+                <i class="fas fa-scroll m-2"></i>
+                <span class="menuText ">
+                    <strong>Report</strong>
+                </span>
+            </a>
+            <a href="@Url.Action("Index", new { Controller = "Account", area = "Security" })" class="nav-menu-item">
+                <i class="fas fa-users m-2"></i>
+                <span class="menuText ">
+                    <strong>Users</strong>
+                </span>
+            </a>
+            <a href="@Url.Action("Index", new { Controller = "Role", area = "Security" })" class="nav-menu-item">
+                <i class="fas fa-user-tag m-2"></i>
+                <span class="menuText ">
+                    <strong>Role</strong>
+                </span>
+            </a>
+            <a href="@Url.Action("Index", new { Controller = "UserWiseRole", area = "Security" })" class="nav-menu-item">
+                <i class="fas fa-check-circle m-2"></i>
+                <span class="menuText ">
+                    <strong>User Wise Role</strong>
+                </span>
+            </a>
+        }
+        <a href="@Url.Action("Login", new { Controller = "Account", area = "Security" })" ID="btnLogout" runat="server" class="btnLogout nav-menu-item"><i class="fas fa-sign-out-alt mx-1"></i><span class="menuText">Log Out</span></a>
+    </div>
+    <div>
+        @RenderBody()
+    </div>
+    <hr />
+    <footer>
+        <p class="text-center font-weight-bold p-3 text-danger">&copy; @DateTime.Now.Year - Zupree Application Made By @@SOHAN PARVEZ SOPA </p>
+    </footer>
+</div>
+<script src="~/Scripts/jquery-3.6.0.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/moment.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+<script src="~/vendor/select2/select2.min.js"></script>
+
+<!-- Custom JS-->
+<script src="~/Scripts/main.js"></script>
+<script type="text/javascript">
+
+    $('#NavMenuBar').click(function () {
+        SideMenuOpenClose();
+    });
+
+    //    $('#ContentBody').click(function () {
+    //    SideMenuOpenClose();
+    //});
+
+
+    function SideMenuOpenClose() {
+        let SideNavID = $('#SideNavID');
+        let ContentOverlayID = $('#ContentBody');
+        let menuText = $('.menuText');
+        if (SideNavID.hasClass('sideNavClose')) {
+            SideNavID.removeClass('sideNavClose')
+            SideNavID.addClass('sideNavOpen')
+            menuText.removeClass('d-none');
+            ContentOverlayID.removeClass('ContentBody-MS')
+            ContentOverlayID.addClass('ContentBody-M')
+        } else {
+            SideNavID.removeClass('sideNavOpen')
+            SideNavID.addClass('sideNavClose')
+            menuText.addClass('d-none');
+            ContentOverlayID.removeClass('ContentBody-M')
+            ContentOverlayID.addClass('ContentBody-MS')
+        }
+    }
+
+</script>
+</body>
+</html>

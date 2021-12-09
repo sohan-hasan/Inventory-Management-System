@@ -1,0 +1,205 @@
+﻿@model PagedList.IPagedList<Model_Zupree.ProductViewModel>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container-fluid">
+    <div class="my-5">
+        <div class="row">
+            @using (Html.BeginForm("Index", "Product", FormMethod.Get))
+            {
+                <p class="my-3">
+                    <div class="input-group">
+                        <div class="form-outline">
+                            @Html.TextBox("SearchString", null, htmlAttributes: new { @class = "form-control", @type = "search", @placeholder = "Search Product" })
+                        </div>
+                        <button type="submit" class="btn btn-warning" style="height:38px;">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </p>
+            }
+            @using (Html.BeginForm("SelectAndDelete", "Product", FormMethod.Post))
+            {
+                <p class="my-3">
+                    <a href="#" class="btn btn-save" name="btnCreateModal" data-bs-toggle="modal" data-bs-target="#CreateModal">Add Product</a>
+                    <button type="submit" class="btn btn-delete" onclick="return confirm('Do you want to Delete?')">Select &amp; Delete</button>
+                </p>
+                <h2 class="my-3">Avilable Product</h2>
+                <div class="col-md-12  table-responsive">
+                    <table class="table table-bordered text-center">
+                        <tr>
+                            <th style="width: 60px;"><input type="checkbox" id="CheckBoxAll" /></th>
+                            <th>@Html.ActionLink("Product Id", "Index", new { SortOrder = ViewBag.SortNameParam })</th>
+                            <th>Product Name</th>
+                            <th>Purchase Date</th>
+                            <th>Category</th>
+                            <th>Supplier</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                            <th>MSRP</th>
+                            <th>Product Image</th>
+                            <th></th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="chkCheckBoxId" value="@item.ProductId" name="productId" /></td>
+                                <td>@Html.DisplayFor(modelItem => item.ProductId)</td>
+                                <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                                <td>@Convert.ToString(string.Format("{0:dd/MM/yyyy}", item.PurchaseDate))</td>
+                                <td>@Html.DisplayFor(modelItem => item.CategoryName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.SupplierName)</td>
+                                <td>@Html.DisplayFor(modelItem => item.Quantity)</td>
+                                <td>@Html.DisplayFor(modelItem => item.UnitPrice)</td>
+                                <td>@Html.DisplayFor(modelItem => item.MSRP)</td>
+                                <td>
+                                    <img src="@Url.Content(item.ImageUrl)" alt="@item.ImageName" width="50" height="50" />
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-update" name="btnEditModal" onclick='Update("+@item.ProductId+")' data-bs-toggle="modal" data-bs-target="#EditModal">Edit</a>
+                                    <a href="#" class="btn btn-delete" name="btnDeleteModal" onclick='Delete("+@item.ProductId+")' data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete</a>
+                                    <a href="#" class="btn btn-details" name="details" onclick='Details("+@item.ProductId+")' data-bs-toggle="modal" data-bs-target="#detailsModal">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                    <br />
+                    Page @(Model.PageCount<Model.PageNumber?0:Model.PageNumber) Of @Model.PageCount
+                    @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page, SortOrder = ViewBag.CurrentSort, CurrentFilter = ViewBag.CurrentFilter }))
+                </div>
+            }
+        </div>
+    </div>
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5 ba">
+                    <h3 class="modal-title" id="detailsModalLabel">Product Details</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    <div id="DetailsDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/User/Views/Product/_Details.cshtml", Model)
+
+
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="CreateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Add Product</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    @{Html.RenderAction("Create");}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Update Product</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-md-5">
+                    <div id="EditDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/User/Views/Product/_Edit.cshtml", Model);
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="DeleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header px-md-5">
+                    <h3 class="modal-title" id="detailsModalLabel">Delete Product</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="DeleteDiv">
+                        @if (ViewBag.Details == "Show")
+                        {
+                            @Html.Partial("~/Areas/User/Views/Product/_Delete.cshtml", Model);
+                            ViewBag.Details = "";
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script>
+    function Details(productId) {
+        $.ajax({
+            url: "/Product/Details?id=" + productId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#DetailsDiv').show();
+                $('#DetailsDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+    function Update(ProductId) {
+        $.ajax({
+            url: "/Product/Edit?id=" + ProductId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#EditDiv').show();
+                $('#EditDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+    function Delete(productId) {
+        $.ajax({
+            url: "/Product/Delete?id=" + productId,
+            type: "GET",
+            data: "",
+            contentType: 'application/json; charset = utf-8',
+            success: function (data) {
+                $('#DeleteDiv').show();
+                $('#DeleteDiv').html(data);
+            },
+            error: function () {
+                alert("Error occured")
+            }
+        })
+    }
+    $(document).ready(function () {
+        $('#CheckBoxAll').click(function () {
+            if ($(this).is(":checked")) {
+                $('.chkCheckBoxId').prop('checked', true);
+            }
+            else
+                $('.chkCheckBoxId').prop('checked', false);
+        })
+    })
+</script>

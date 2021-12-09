@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Model_Zupree.CategoryViewModel>
+<h2 class="mb-3">Category List</h2>
+<div>
+    <table class="table table-bordered table-striped">
+        <tr>
+            <td colspan="3"><h6 class="text-danger">Page Loading @@ : @DateTime.Now.ToString()</h6></td>
+        </tr>
+        <tr>
+            <th>Category Id</th>
+            <th>Category Name</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td>@item.CategoryId</td>
+        <td>@item.CategoryName</td>
+        <td>
+            <a href="#" class="btn btn-update" name="btnEditModal" onclick='Update("+@item.CategoryId+")' data-bs-toggle="modal" data-bs-target="#EditModal">Edit</a>
+            <a href="#" class="btn btn-delete" name="btnDeleteModal" onclick='Delete("+@item.CategoryId+")' data-bs-toggle="modal" data-bs-target="#DeleteModal">Delete</a>
+        </td>
+    </tr>
+        }
+    </table>
+</div>

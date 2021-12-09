@@ -1,0 +1,54 @@
+﻿@model Model_Zupree.SalesViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+}
+@using (Html.BeginForm("Create", "Sales", new { area = "User" }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        @Html.HiddenFor(model => model.SalesNumber)
+        <div class="form-group mb-3">
+            @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerPhone, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerPhone, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CustomerPhone, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.CustomerEmail, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CustomerEmail, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.PaymentId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.PaymentId, new SelectList(ViewBag.Payments, "PaymentId", "PaymentType"), "Select Payment Type", new { @class = "form-select" })
+            @Html.ValidationMessageFor(model => model.PaymentId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.ProductId, htmlAttributes: new { @class = "form-label" })
+            @Html.DropDownListFor(model => model.ProductId, new SelectList(ViewBag.Products, "ProductId", "ProductName"), "Select Product", new { @class = "form-select"})
+            @Html.ValidationMessageFor(model => model.ProductId, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.SalesUnitPrice, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.SalesUnitPrice, new { htmlAttributes = new { @class = "form-control", @value = "0" } })
+            @Html.ValidationMessageFor(model => model.SalesUnitPrice, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "form-label" })
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @value = "0", } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group mb-3">
+            <button type="submit" class="btn btn-update">Update</button>
+            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancel</button>
+        </div>
+    </div>
+}
